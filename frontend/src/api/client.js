@@ -6,6 +6,6 @@ export async function getHealth() {
 }
 
 export async function getProducts() {
-  const r = await fetch(`${API}/api/products`);
+  const r = await fetch('/api/products');
   return r.json();
 }
