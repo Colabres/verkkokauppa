@@ -1,11 +1,18 @@
+import { useState } from "react";
+import ProfileOffcanvas from "./ProfileOffcanvas.jsx";
+
 export default function TopNav({ userId = 0, onSearch }) {
-  function handleSubmit(e) {
+    
+    const [showProfile, setShowProfile] = useState(false);
+
+    function handleSubmit(e) {
     e.preventDefault();
     const term = new FormData(e.currentTarget).get("q")?.trim() || "";
     onSearch?.(term);
   }
 
   return (
+        <>
     <nav className="navbar navbar-expand-lg bg-dark navbar-dark py-3 fixed-top">
       <div className="container">
         {/* Brand (replace with Router link later) */}
@@ -21,7 +28,7 @@ export default function TopNav({ userId = 0, onSearch }) {
         <div className="col-lg-3">
           <form onSubmit={handleSubmit}>
             <div className="input-group mb-0">
-              <input name="q" type="text" className="form-control" placeholder="Search by name" />
+              <input name="q" type="text" className="form-control" placeholder="Search" />
               <button className="btn btn-outline-light" type="submit">
                 <i className="bi bi-search" />
               </button>
@@ -32,12 +39,30 @@ export default function TopNav({ userId = 0, onSearch }) {
         {/* Right-side links */}
         <div className="collapse navbar-collapse" id="navmenu">
           <ul className="navbar-nav ms-auto">
-            <li className="nav-item"><a className="nav-link" href={`/profile${userId}`}>Profile</a></li>
-            <li className="nav-item"><a className="nav-link" href="/contactlist">Contactlist</a></li>
+            <li className="nav-item">
+                <button
+                    type="button"
+                    className="nav-link btn btn-link text-decoration-none"  
+                    onClick={() => setShowProfile(true)}
+                >
+                    <i className="bi bi-person me-1" />
+                    Profile
+                </button>
+                </li>      
             <li className="nav-item"><a className="nav-link" href="/logout">Logout</a></li>
           </ul>
         </div>
-      </div>
+
+      </div>      
     </nav>
+          <ProfileOffcanvas
+        show={showProfile}
+        onClose={() => setShowProfile(false)}
+        onLogin={(creds) => {
+          console.log("Login:", creds);
+          setShowProfile(false);
+        }}
+      />
+      </>
   );
 }
